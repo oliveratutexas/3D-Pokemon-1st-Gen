@@ -1,0 +1,4 @@
+Figure out why the cubes are stretched
+prop up cubes corresponding to image
+
+Currently the drawing might be slow because I'm not mapping textures. I think once I start mapping textures, drawing this stuff out won't suck as much.
