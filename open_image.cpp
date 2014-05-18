@@ -12,6 +12,7 @@ using namespace std;
 using namespace Magick;
 
 static void drawStuff();
+static void project_img();
 
 // This sets the camera to a front view
 static void setCamera(){
@@ -48,18 +49,60 @@ static void setCamera(){
 
 static void mouseStuff(int button, int state, int x, int y){
 	
-	float d_x = 2.0;
+	float d_x = 5.0;
 		
 	switch(button){
 		
-	case GLUT_LEFT_BUTTON	:printf("Left is happening\n");	glRotatef(d_x, 0.0, 1.0, 0.0);	break;
+	case GLUT_LEFT_BUTTON	:	glRotatef(d_x, 0.0, 1.0, 0.0);	break;
 	case GLUT_RIGHT_BUTTON	:	glRotatef(-d_x, 0.0, 1.0, 0.0);	break;
 	default: 			break;
 	
 	}	
 	
-	drawStuff();
+	project_img();
 	//TODO - refresh screen here
+}
+
+float CUBE_DIMEN = 0.010f;
+Image cur_img;
+
+static void project_img(void){
+	
+	//TODO - this will be the bulkiest function.
+	// Need to add in intelligence when I got images.
+		
+	glClear(GL_COLOR_BUFFER_BIT);
+	glutSwapBuffers();
+	
+	glPushMatrix();
+	
+	int img_height = cur_img.size().height();
+	int img_width = cur_img.size().width();
+	int row,col = 0;
+	
+	
+	for(col = 0; col < img_height; col++ )
+	{
+		for(row = 0; row < img_width; row++){
+			
+			ColorRGB pixel = cur_img.pixelColor(row,col);
+			float r_comp = pixel.red();
+			float g_comp = pixel.green();
+			float b_comp = pixel.blue();
+				
+			glTranslatef(CUBE_DIMEN,0.0f,0.0f);
+			glColor3f(r_comp,g_comp,b_comp);
+			glutSolidCube(CUBE_DIMEN);
+		
+		}
+		
+		glTranslatef(-1 * img_width * CUBE_DIMEN, -CUBE_DIMEN, 0.0f);
+
+	}	
+
+	glPopMatrix();
+	glFlush();
+	glutSwapBuffers();
 }
 
 static void drawStuff(){
@@ -117,28 +160,28 @@ static void start_OPEN_GL(){
 	glutInitWindowPosition(100,100);
 	glutCreateWindow("It's happening!!!11!!1");
 	
-	glutDisplayFunc(drawStuff);
+	glutDisplayFunc(project_img);
 	glutMouseFunc(mouseStuff);	
 	//This is the background color in float
 	//I'm making the background white because it makes sense
 	glClearColor(1.0f,1.0f,1.0f,1.0f);
-
+	printf("Hello World\n");
 	glutMainLoop();
 
 }
 
 int main(int argc,char** argv){
 		
-	Image example_image;
-	
 	glutInit(&argc,argv);
-	start_OPEN_GL();
 		
-	example_image.read("ExampleScreenShot.png");
-	ColorRGB pixel = example_image.pixelColor(100,100);	
+	cur_img.read("ExampleScreenShot.png");
+	ColorRGB pixel = cur_img.pixelColor(100,100);	
 		
+	printf("Hello World\n");
 	printf("%f %s", pixel.red() * 255.0,"Hopefully this is green\n");
-	printf("%d %d", (int)example_image.size().width() ,(int) example_image.size().height() );
-	
+	printf("%d %d", (int)cur_img.size().width() ,(int)cur_img.size().height() );
+
+
+	start_OPEN_GL();
 	return 0;
 }
