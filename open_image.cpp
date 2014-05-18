@@ -105,53 +105,6 @@ static void project_img(void){
 	glutSwapBuffers();
 }
 
-static void drawStuff(){
-
-	glClear(GL_COLOR_BUFFER_BIT);
-	glutSwapBuffers();	
-	
-	int width = 4;
-	int height = 4;
-	float cube_dimen = 0.10f;
-
-	int pic[][4] = {
-		{1,0,0,1},
-		{0,2,2,0},
-		{1,2,2,1},
-		{1,1,1,1}
-	};	
-
-	glPushMatrix();
-	glColor3f(0.2f,0.2f,0.2f);
-
-	int i,j = 0;
-	for(i = 0;i < height; i++){
-
-		for(j = 0;j< width; j++){
-			
-			//shift x
-			glTranslatef(cube_dimen,0.0f,0.0f);
-
-			if(pic[i][j] == 1){
-
-			glutSolidCube(cube_dimen);
-
-			}
-		}
-		
-		//gotta compensate for the shifts I just made
-		glTranslatef(-width * cube_dimen,-cube_dimen,0.0f);
-	}
-
-	glPopMatrix();
-	
-	//Do this or the page won't change after I paint everything	
-	glFlush();	/* Flush all executed OpenGL ops finish */
-
-	glutSwapBuffers();
-	
-}
-
 static void start_OPEN_GL(){
 	
 	//START AN OPEN_GL WINDOW	
