@@ -11,6 +11,8 @@
 using namespace std;
 using namespace Magick;
 
+static void drawStuff();
+
 // This sets the camera to a front view
 static void setCamera(){
 
@@ -28,7 +30,7 @@ static void setCamera(){
 	float zNear = 100;
 	float zFar = -100;
 
-	glFrustum(fleft, fright, fbottom, ftop, -zNear, -zFar);
+	glFrustum(fleft, fright, fbottom, ftop, zNear, zFar);
 
 	/* Set the drawing point at the center of the frustum */
 	glMatrixMode( GL_MODELVIEW );
@@ -44,6 +46,22 @@ static void setCamera(){
 
 }
 
+static void mouseStuff(int button, int state, int x, int y){
+	
+	float d_x = 2.0;
+		
+	switch(button){
+		
+	case GLUT_LEFT_BUTTON	:printf("Left is happening\n");	glRotatef(d_x, 0.0, 1.0, 0.0);	break;
+	case GLUT_RIGHT_BUTTON	:	glRotatef(-d_x, 0.0, 1.0, 0.0);	break;
+	default: 			break;
+	
+	}	
+	
+	drawStuff();
+	//TODO - refresh screen here
+}
+
 static void drawStuff(){
 
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -51,12 +69,12 @@ static void drawStuff(){
 	
 	int width = 4;
 	int height = 4;
-	float cube_dimen = 0.005f;
+	float cube_dimen = 0.10f;
 
 	int pic[][4] = {
 		{1,0,0,1},
-		{0,0,0,0},
-		{1,0,0,1},
+		{0,2,2,0},
+		{1,2,2,1},
 		{1,1,1,1}
 	};	
 
@@ -95,12 +113,12 @@ static void start_OPEN_GL(){
 	
 	//START AN OPEN_GL WINDOW	
 	glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGBA);
-	glutInitWindowSize(1024,768);
+	glutInitWindowSize(500,500);
 	glutInitWindowPosition(100,100);
 	glutCreateWindow("It's happening!!!11!!1");
 	
 	glutDisplayFunc(drawStuff);
-	
+	glutMouseFunc(mouseStuff);	
 	//This is the background color in float
 	//I'm making the background white because it makes sense
 	glClearColor(1.0f,1.0f,1.0f,1.0f);
